@@ -1,0 +1,68 @@
+
+# S[SEM=?s] -> Question[SEM=?s]
+
+# Cau hoi
+% start Question
+Question[SEM=(?vp + ?whp)] -> VP[SEM=?vp] WhP[SEM=?whp]
+Question[SEM=(?np + ?vp + ?whp)] -> NP[SEM=?np] VP[SEM=?vp] Pre WhP[SEM=?whp]
+Question[SEM=(?np + ?vp + ?whp)] -> NP[SEM=?np] VP[SEM=?vp] WhP[SEM=?whp]
+Question[SEM=(?vp + ?whp + ?np)] -> VP[SEM=?vp] WhP[SEM=?whp] NP[SEM=?np] 'vậy' Pronoun
+
+Question[] -> NP VP 
+
+# Cac dum dong tu co trong cau
+VP[SEM=(?v + ?np)] -> VP[SEM=?v] NP[SEM=?np]
+VP[SEM=?v] -> AuxV VP[SEM=?v]
+VP[SEM=?v] -> V[SEM=?v]
+
+AuxV -> 'có_thể'
+
+V[SEM=''] -> 'đi' | 'có' | 'nhắc_lại'
+
+# Cac loai cum danh Tu
+NP[SEM=(?n1 + ?n2)] -> NP[SEM=?n1] NP[SEM=?n2]
+NP[SEM=?np] -> FROM[SEM=?np]
+NP[SEM=?np] -> TO[SEM=?np]
+NP[SEM=?np] -> Place[SEM=?np]
+NP[SEM=?np] -> Quantities NP[SEM=?np]
+NP[SEM=?np] -> N[SEM=?np]
+NP[SEM=?np] -> Pronoun[SEM=?np]
+
+Quantities -> 'tất_cả' | 'các'
+
+FROM[SEM=('From' + ?place)] -> 'từ' Place[SEM=?place]
+TO[SEM=('To' + ?place)] -> TO_ Place[SEM=?place]
+
+TO_ -> 'đến'|'đi'|'tour'|'tới'
+
+# Cac danh tu chi dia diem
+Place[SEM='HCMC'] -> 'Hồ_Chí_Minh'
+Place[SEM='NT'] -> 'Nha_Trang'
+Place[SEM='DN'] -> 'Đà_Nẵng'
+Place[SEM='PQ'] -> 'Phú_Quốc'
+
+# Cum de hoi bao gom: chu de + tu de hoi
+## Ex: may chuyen + may gio -> meaning bao gom ca topic va tu he hoi
+WhP[SEM=(?wh + ?topic)] -> NP[SEM=?topic] Wh[SEM=?wh, TP='left']
+WhP[SEM=(?wh + ?topic)] -> Wh[SEM=?wh, TP='right'] NP[SEM=?topic]
+
+# Bao lau -> chu de phu thuoc vao tu de hoi
+WhP[SEM=(?topic)] -> Pre Wh[SEM=?topic, TP='none']
+
+## Cac preposition tam thoi
+Pre -> 'hết'|'trong'|'bằng'|'những'
+
+## Cac danh tu co chu de
+N[SEM='date'] -> 'ngày'
+N[SEM='vehicle'] -> 'phương_tiện'
+N[SEM='tour'] -> 'tour'|'chuyến'
+
+## Tu de hoi
+Wh[SEM='How_long', TP='none'] -> 'bao_lâu'
+
+### Nhung cum hoi nay can co topic di kem
+Wh[SEM='How_many', TP='right'] -> 'bao_nhiêu'|'mấy'
+Wh[SEM='What', TP='left'] -> 'gì_vậy'|'nào_nhỉ'|'được_không'
+
+# Dai tu
+Pronoun[SEM=''] -> 'bạn' | 'anh' | 'chị' | 'chú' | 'bác' | 'cô' | 'em'
