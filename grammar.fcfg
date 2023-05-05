@@ -3,10 +3,10 @@
 
 # Cau hoi
 % start Question
-Question[SEM=(?vp + ?whp)] -> VP[SEM=?vp] WhP[SEM=?whp]
-Question[SEM=(?np + ?vp + ?whp)] -> NP[SEM=?np] VP[SEM=?vp] Pre WhP[SEM=?whp]
-Question[SEM=(?np + ?vp + ?whp)] -> NP[SEM=?np] VP[SEM=?vp] WhP[SEM=?whp]
-Question[SEM=(?vp + ?whp + ?np)] -> VP[SEM=?vp] WhP[SEM=?whp] NP[SEM=?np] 'vậy' Pronoun
+Question[SEM=(?whp + ?vp)] -> VP[SEM=?vp] WhP[SEM=?whp]
+Question[SEM=(?whp + ?np + ?vp)] -> NP[SEM=?np] VP[SEM=?vp] Pre WhP[SEM=?whp]
+Question[SEM=(?whp + ?np + ?vp)] -> NP[SEM=?np] VP[SEM=?vp] WhP[SEM=?whp]
+Question[SEM=(?whp + ?vp + ?np)] -> VP[SEM=?vp] WhP[SEM=?whp] NP[SEM=?np] 'vậy' Pronoun
 
 Question[] -> NP VP 
 
@@ -55,7 +55,7 @@ Pre -> 'hết'|'trong'|'bằng'|'những'
 ## Cac danh tu co chu de
 N[SEM='date'] -> 'ngày'
 N[SEM='vehicle'] -> 'phương_tiện'
-N[SEM='tour'] -> 'tour'|'chuyến'
+N[SEM=''] -> 'tour'|'chuyến'
 
 ## Tu de hoi
 Wh[SEM='How_long', TP='none'] -> 'bao_lâu'

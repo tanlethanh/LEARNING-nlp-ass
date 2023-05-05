@@ -8,3 +8,6 @@ scipy>=1.5.4
 matplotlib>=3.3.2
 
 git+https://github.com/thanhhungqb/pyutils
+
+nltk~=3.8.1
+setuptools~=66.0.0

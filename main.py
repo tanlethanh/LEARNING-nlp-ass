@@ -1,20 +1,13 @@
-from io import StringIO
-from nltk import data
-from custom_parser import BottomUpLeftCornerChartParser
+from nltk import data, Tree
+from custom_parser import Parser
+from utils import context_filter, cv_query
+import re
 
-class NullIO(StringIO):
-    def write(self, txt):
-        pass
+print('----------------------------- Load Parser -----------------------------')
 
-filename = './grammar.fcfg'
-data.show_cfg(filename)
+cp = Parser(data.load('./grammar.fcfg'))
 
-print('\n ----------------------------- Load Parser ----------------------------- \n')
-
-# cp = load_parser(filename, trace=3)
-cp = BottomUpLeftCornerChartParser(data.load(filename))
-
-print('\n ----------------------------- Parsing ----------------------------- \n')
+print('----------------------------- Parsing -----------------------------')
 
 special_tokens = [
     'Hồ Chí Minh', 
@@ -49,24 +42,103 @@ for idx, query in enumerate(queries):
         
 # print(queries)
 
+database = {
+    "RUN-TIME": {
+        "HCMC-PQ": "2:00 HR",
+        "HCMC-DN": "2:00 HR",
+        "HCMC-NT": "5:00 HR",
+    },
+    "BY": {
+        "PQ": "airplane",
+        "DN": "airplane",
+        "NT": "train"
+    },
+    "DTIME": [
+        { "HCMC-PQ": "7AM 1/7" },
+        { "HCMC-PQ": "8AM 5/7" },
+        { "HCMC-DN": "7AM 1/7" },
+        { "HCMC-DN": "7AM 4/7" },
+        { "HCMC-NT": "7AM 1/7" },
+        { "HCMC-NT": "7AM 5/7" },
+    ],
+    "ATIME": [
+        { "HCMC-PQ": "9AM 1/7" },
+        { "HCMC-PQ": "10AM 5/7" },
+        { "HCMC-DN": "9AM 1/7" },
+        { "HCMC-DN": "9AM 4/7" },
+        { "HCMC-NT": "12AM 1/7" },
+        { "HCMC-NT": "12AM 5/7" },
+    ]
+}
 
-print('\n ----------------------------- Result ----------------------------- \n')
+print('----------------------------- Result ----------------------------- \n')
 
 for (index, query) in enumerate(queries):
     print(f"------------------------ {index} ------------------------")
     trees = cp.parse_all(query)
     
-    print("\nCurrent query: ", query)
+    print("Current query: ", query)
     
-    if len(trees) > 0:
-        print('Number of parsed trees', len(trees))
-        print('First tree')
-        print(trees[0])
+    for tree in trees:
+        try:
+            if not isinstance(tree, Tree):
+                continue    
+            full_sematic = tree.label()['SEM']
+            full_sematic = list(filter(lambda ele: ele != '', full_sematic))
+            print('SEM: ', str(full_sematic))
+            try:
+                ctx = context_filter(full_sematic)
+            except Exception as e:
+                print("Some thing wrong", e)
+                
+            print(ctx)
+                
+            # context = {
+            #     "From": None,
+            #     "To": None,
+            #     "Aim": [],
+            #     "Question": None
+            # }
+            
+            result = None
+            query_form = cv_query(ctx["From"]) + "-" + cv_query(ctx["To"])
 
-        answer = trees[0].label()['SEM']
-        ans_str = ' '.join(answer)
-        print('\nSEM: ', ans_str)
+            if ctx['Question'] == 'How_long':
+                result = []
+                data = database["RUN-TIME"]
+                
+                for key in data.keys():
+                    if re.match(query_form, key):
+                        result.append(data[key])
 
+            elif ctx['Question'] == "How_many":
+                data = database["DTIME"]
+                result = 0
+                for dtime in data:
+                    if re.match(query_form, list(dtime.keys())[0]):
+                        result += 1
+            
+            elif ctx['Question'] == "What":
+                
+                if ctx['Topic'] == 'date':
+                    data = database["DTIME"]
+                    result = []
+                    for dtime in data:
+                        key = list(dtime.keys())[0]
+                        if re.match(query_form, key):
+                            result += [dtime[key].split()[1]]
+                    
+                elif ctx['Topic'] == 'vehicle':
+                    data = database["BY"]
+                    result = data[ctx["To"]]                
+
+                elif ctx['Topic'] is None:
+                    result = database["ATIME"]
+            
+            print("result", result) 
+            break
+        except:
+            print("Not suited")
+            continue
     else:
         print('No parsed tree')
-
