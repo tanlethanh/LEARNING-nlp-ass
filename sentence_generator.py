@@ -3,7 +3,7 @@ from nltk import data, CFG, Production
 import sys
 
 MAX_DEPTH = 30
-NUMBER_OF_SENTENCES = 100
+NUMBER_OF_SENTENCES = 10000
 INFINITE_LOOP_COUNT = 1000000
 
 
