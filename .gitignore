@@ -124,3 +124,6 @@ dmypy.json
 .Rhistory
 /wandb
 
+CFG/
+
+refs
