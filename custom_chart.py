@@ -5,7 +5,7 @@ from nltk import Tree, TYPE, unify
 from nltk.parse.chart import EdgeI, LeafEdge
 
 
-class Chart:
+class Chart():
 
     def __init__(self, tokens):
         """
