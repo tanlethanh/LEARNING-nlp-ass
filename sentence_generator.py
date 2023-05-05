@@ -3,7 +3,7 @@ from nltk import data, CFG, Production
 import sys
 
 MAX_DEPTH = 30
-NUMBER_OF_SENTENCES = 1000
+NUMBER_OF_SENTENCES = 100
 INFINITE_LOOP_COUNT = 1000000
 
 
@@ -44,7 +44,7 @@ def generate_sentence(grammar: CFG):
         
         print("Count", len(generated_sentences))
 
-        print_to_file(generated_sentences, "output/samples_error.txt")
+        print_to_file(generated_sentences, "output/samples.txt")
         print("------------------------------------------------------")
     except RecursionError:
         print("Please RUN again! RecursionError: maximum recursion depth exceeded.")
