@@ -12,6 +12,7 @@ def print_to_file(generated_sentences, filename):
         for sentence in generated_sentences:
             file.write(sentence + "\n")
 
+
 def create_sentence(start, grammar: CFG):
     created_string = []
 
@@ -25,8 +26,10 @@ def create_sentence(start, grammar: CFG):
                     created_string.append(ele)
                 else:
                     dfs(ele)
+
     dfs(start)
     return " ".join(created_string)
+
 
 def generate_sentence(grammar: CFG):
     try:
@@ -38,10 +41,10 @@ def generate_sentence(grammar: CFG):
             if len(generated_sentences) >= NUMBER_OF_SENTENCES:
                 break
             print(sentence)
-            
+
             if sentence not in generated_sentences:
                 generated_sentences.append(sentence)
-        
+
         print("Count", len(generated_sentences))
 
         print_to_file(generated_sentences, "output/samples.txt")
